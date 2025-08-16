@@ -12,6 +12,10 @@ Una interfaz web interactiva que permite a los usuarios finales crear flujos, se
 - **Configuración avanzada** de campos con validaciones y metadatos
 - **Persistencia local** con localStorage
 - **Importación/Exportación** de flujos en formato JSON
+- **Preview móvil** para simular la experiencia en dispositivos móviles
+- **Interfaz ultra-compacta** optimizada para máximo aprovechamiento del espacio vertical
+- **Iconos intuitivos** para cada tipo de componente
+- **Tooltips informativos** que aparecen al hacer hover
 
 ## 🎨 Paleta de Colores
 
@@ -40,14 +44,25 @@ Flow
 
 ### Tipos de Campos Disponibles
 
-- **Text**: Entrada de texto de una línea
-- **Textarea**: Entrada de texto multilínea
-- **Number**: Entrada numérica
-- **Email**: Entrada de correo electrónico
-- **Tel**: Entrada de teléfono
-- **Date**: Selector de fecha
-- **Checkbox**: Casilla de verificación
-- **Select**: Menú desplegable
+#### **Campos Básicos**
+- **📝 Text**: Entrada de texto de una línea
+- **📄 Textarea**: Entrada de texto multilínea
+- **🔢 Number**: Entrada numérica
+- **📧 Email**: Entrada de correo electrónico
+- **📞 Tel**: Entrada de teléfono
+- **📅 Date**: Selector de fecha
+- **☑️ Checkbox**: Casilla de verificación
+- **📋 Select**: Menú desplegable
+
+#### **Campos Avanzados** ✨ **NUEVO**
+- **📎 File Upload**: Subida de archivos con validaciones
+  - Tipos permitidos: PDF, PNG, JPG, JPEG
+  - Tamaño máximo configurable (1-50 MB)
+  - Lista personalizable de extensiones
+- **📷 Camera**: Captura de fotos y acceso a galería
+  - Calidad configurable: Low, Medium, High
+  - Opción de acceso a galería de fotos
+  - Optimizado para dispositivos móviles
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -69,8 +84,7 @@ Flow
   "tailwindcss": "^3.4.0",
   "react-dnd": "^16.0.1",
   "react-dnd-html5-backend": "^16.0.1",
-  "@monaco-editor/react": "^4.7.0",
-  "uuid": "^11.1.0"
+  "@monaco-editor/react": "^4.7.0"
 }
 ```
 
@@ -125,22 +139,34 @@ npm start
 2. **Organiza jerárquicamente**: Fields → Forms → Sections → Flow
 3. **Configura cada componente** haciendo clic en la flecha para expandir
 4. **Visualiza el JSON** en tiempo real en el panel derecho
+5. **Preview móvil** en la ruta `/preview` para ver el resultado final
 
 ### Comportamiento del Drag & Drop
 
 - **Flow**: Solo acepta sections
 - **Section**: Acepta forms y fields
   - Si no hay forms: crea un nuevo form con el field
-  - Si ya hay forms: agrega el field al primer form existente
+  - Si ya hay forms: el field debe ser arrastrado al form específico
 - **Form**: Solo acepta fields
 - **Field**: Solo se puede mover
 
 ### Configurar Campos
 
+#### **Campos Básicos**
 - **Label**: Nombre del campo
 - **Placeholder**: Texto de ayuda
 - **Validaciones**: Required, regex, min/max, etc.
 - **Metadatos**: Colores de error, traducciones, estilos
+
+#### **Campos de Archivo** ✨ **NUEVO**
+- **Tamaño máximo**: Configurable en MB (1-50)
+- **Tipos permitidos**: Lista editable de extensiones
+- **Validaciones**: Restricciones de tipo y peso
+
+#### **Campos de Cámara** ✨ **NUEVO**
+- **Calidad de foto**: Low, Medium, High
+- **Acceso a galería**: Opción habilitable/deshabilitable
+- **Optimización móvil**: Interfaz táctil-friendly
 
 ### Configurar Formularios
 
@@ -152,6 +178,33 @@ npm start
 
 - **Nombre**: Identificador de la sección
 - **Formularios**: Lista de formularios agrupados
+
+## 🎨 **Interfaz Ultra-Compacta** ✨ **NUEVO**
+
+### **Optimizaciones de Espacio**
+- **Componentes reducidos**: 40-50% menos espacio vertical
+- **Iconos descriptivos**: Identificación visual rápida
+- **Tooltips inteligentes**: Información contextual al hover
+- **Layout optimizado**: Mejor aprovechamiento de la pantalla
+
+### **Características Visuales**
+- **Iconos únicos**: Cada tipo de campo tiene su emoji distintivo
+- **Colores temáticos**: Paleta consistente con la marca
+- **Transiciones suaves**: Animaciones fluidas en hover
+- **Diseño responsive**: Se adapta a diferentes tamaños de pantalla
+
+## 📱 **Preview Móvil** ✨ **NUEVO**
+
+### **Simulación de Dispositivo**
+- **Frame de móvil**: Diseño realista con bordes redondeados
+- **Navegación por secciones**: Cambio entre secciones del flujo
+- **Navegación por formularios**: Cambio entre formularios
+- **Renderizado de campos**: Todos los tipos de campos soportados
+
+### **Campos Especiales en Móvil**
+- **File Upload**: Área de drop visual con información de tipos
+- **Camera**: Botones duales para foto y galería
+- **Responsive**: Optimizado para pantallas táctiles
 
 ## 💾 Persistencia
 
@@ -231,15 +284,16 @@ petzito/
 │   └── favicon.ico
 ├── src/
 │   ├── components/
-│   │   ├── ComponentPalette.tsx    # Paleta de componentes arrastrables
-│   │   ├── FieldComponent.tsx      # Componente de campo individual
-│   │   ├── FormComponent.tsx       # Componente de formulario
-│   │   ├── SectionComponent.tsx    # Componente de sección
+│   │   ├── ComponentPalette.tsx    # Paleta de componentes con iconos y tooltips
+│   │   ├── FieldComponent.tsx      # Componente de campo individual optimizado
+│   │   ├── FormComponent.tsx       # Componente de formulario compacto
+│   │   ├── SectionComponent.tsx    # Componente de sección optimizado
 │   │   ├── FlowComponent.tsx       # Componente principal del flujo
-│   │   └── JsonPanel.tsx          # Panel de edición JSON
+│   │   ├── JsonPanel.tsx          # Panel de edición JSON con Monaco Editor
+│   │   └── MobilePreview.tsx      # ✨ NUEVO: Preview móvil del flujo
 │   ├── types/
-│   │   └── index.ts               # Definiciones de tipos TypeScript
-│   ├── App.tsx                    # Componente principal de la aplicación
+│   │   └── index.ts               # Definiciones de tipos TypeScript actualizadas
+│   ├── App.tsx                    # Componente principal con routing
 │   ├── index.tsx                  # Punto de entrada
 │   └── index.css                  # Estilos globales y TailwindCSS
 ├── tailwind.config.js             # Configuración de TailwindCSS
@@ -265,13 +319,16 @@ REACT_APP_DEBUG=true
 
 ## 🎯 Funcionalidades Futuras
 
+- [x] **Campos de archivo y cámara** ✨ **COMPLETADO**
+- [x] **Interfaz ultra-compacta** ✨ **COMPLETADO**
+- [x] **Iconos y tooltips** ✨ **COMPLETADO**
+- [x] **Preview móvil** ✨ **COMPLETADO**
 - [ ] Conectividad con backend
 - [ ] Pruebas unitarias e integración
 - [ ] Temas personalizables
 - [ ] Colaboración en tiempo real
 - [ ] Plantillas predefinidas
 - [ ] Validación de esquemas
-- [ ] Preview de formularios
 - [ ] Exportación a diferentes formatos
 - [ ] Sistema de versionado de flujos
 
@@ -289,6 +346,7 @@ REACT_APP_DEBUG=true
 - Mantener componentes pequeños y reutilizables
 - Documentar funciones complejas
 - Usar TailwindCSS para estilos
+- Implementar iconos y tooltips para mejor UX
 
 ## 📄 Licencia
 
@@ -319,3 +377,21 @@ npm install && npm start
 ```
 
 ¡La aplicación estará disponible en [http://localhost:3000](http://localhost:3000)!
+
+## ✨ **Novedades de la Última Versión**
+
+### **v2.0.0 - Interfaz Ultra-Compacta y Nuevos Campos**
+- 🆕 **Campos de archivo**: Subida de documentos e imágenes con validaciones
+- 🆕 **Campos de cámara**: Captura de fotos y acceso a galería
+- 🎨 **Interfaz optimizada**: 40-50% menos espacio vertical
+- 🔍 **Iconos descriptivos**: Identificación visual rápida de componentes
+- 💡 **Tooltips inteligentes**: Información contextual al hacer hover
+- 📱 **Preview móvil**: Simulación completa de la experiencia móvil
+- 🚀 **Mejor rendimiento**: Componentes más ligeros y eficientes
+
+### **Mejoras Técnicas**
+- **TypeScript actualizado**: Nuevos tipos para campos de archivo y cámara
+- **Componentes optimizados**: Reducción significativa del espacio vertical
+- **Iconografía mejorada**: Emojis únicos para cada tipo de campo
+- **Responsive design**: Mejor adaptación a diferentes tamaños de pantalla
+- **UX mejorada**: Tooltips y transiciones más fluidas
