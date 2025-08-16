@@ -62,12 +62,16 @@ const FlowComponent: React.FC<FlowComponentProps> = ({ flow, onUpdate }) => {
   };
 
   const handleFieldDrop = (field: Field, formId: string) => {
+    console.log('FlowComponent: Field dropped on form ID:', formId);
+    console.log('Field data:', field);
+
     const updatedFlow = {
       ...flow,
       sections: flow.sections.map(s => ({
         ...s,
         forms: s.forms.map(f => {
           if (f.id === formId) {
+            console.log('Adding field to form:', f.name, f.id);
             return { ...f, fields: [...f.fields, field] };
           }
           return f;
@@ -88,7 +92,7 @@ const FlowComponent: React.FC<FlowComponentProps> = ({ flow, onUpdate }) => {
             </span>
           </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Flow Name</label>
           <input

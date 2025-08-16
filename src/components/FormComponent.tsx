@@ -24,6 +24,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ form, onUpdate, onDelete,
   const [{ isOver }, drop] = useDrop({
     accept: ['field'],
     drop: (item: any) => {
+      console.log('Field dropped on form:', form.id, form.name);
+      console.log('Field data:', item.data);
       if (item.type === 'field') {
         onFieldDrop(item.data, form.id);
       }
@@ -58,28 +60,29 @@ const FormComponent: React.FC<FormComponentProps> = ({ form, onUpdate, onDelete,
   return (
     <div
       ref={drag as any}
-      className={`bg-white rounded-lg shadow-md border-2 border-dashed border-petzito-mustard p-4 mb-4 cursor-move transition-all duration-200 ${
-        isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg'
+      className={`bg-white rounded-lg shadow-sm border border-petzito-mustard p-2 mb-2 cursor-move transition-all duration-200 ${
+        isDragging ? 'opacity-50 scale-95' : 'hover:shadow-md'
       }`}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-1">
         <div className="flex items-center space-x-2">
+          <span className="text-lg">📋</span>
           <span className="px-2 py-1 rounded-full text-xs font-medium bg-petzito-mustard text-white">
             Form
           </span>
-          <h3 className="font-medium text-gray-800">{form.name || 'Unnamed Form'}</h3>
+          <h3 className="font-medium text-gray-800 text-sm">{form.name || 'Unnamed Form'}</h3>
           <span className="text-sm text-gray-500">({form.fields.length} fields)</span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1 text-gray-500 hover:text-gray-700"
+            className="p-1 text-gray-500 hover:text-gray-700 text-xs"
           >
             {isExpanded ? '▼' : '▶'}
           </button>
           <button
             onClick={onDelete}
-            className="p-1 text-red-500 hover:text-red-700"
+            className="p-1 text-red-500 hover:text-red-700 text-xs"
           >
             ×
           </button>
@@ -87,46 +90,48 @@ const FormComponent: React.FC<FormComponentProps> = ({ form, onUpdate, onDelete,
       </div>
 
       {isExpanded && (
-        <div className="space-y-4 pt-3 border-t border-gray-200">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Form Name</label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-petzito-mustard focus:border-transparent"
-            />
+        <div className="space-y-2 pt-2 border-t border-gray-200">
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Form Name</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-petzito-mustard focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Submit URL</label>
+              <input
+                type="url"
+                value={form.submitUrl || ''}
+                onChange={(e) => handleInputChange('submitUrl', e.target.value)}
+                className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-petzito-mustard focus:border-transparent"
+                placeholder="https://api.example.com/submit"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Submit URL</label>
-            <input
-              type="url"
-              value={form.submitUrl || ''}
-              onChange={(e) => handleInputChange('submitUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-petzito-mustard focus:border-transparent"
-              placeholder="https://api.example.com/submit"
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-gray-700">Fields</label>
-              <span className="text-sm text-gray-500">Drop fields here</span>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-medium text-gray-700">Fields</label>
+              <span className="text-xs text-gray-500">Drop fields here</span>
             </div>
             <div
               ref={drop as any}
-              className={`min-h-[100px] p-3 border-2 border-dashed rounded-lg transition-colors ${
+              className={`min-h-[60px] p-2 border-2 border-dashed rounded-lg transition-colors ${
                 isOver ? 'border-petzito-teal bg-petzito-teal bg-opacity-10' : 'border-gray-300'
               }`}
             >
               {form.fields.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
-                  <p>No fields yet</p>
-                  <p className="text-sm">Drag and drop fields here</p>
+                <div className="text-center text-gray-500 py-4">
+                  <p className="text-sm">No fields yet</p>
+                  <p className="text-xs">Drag and drop fields here</p>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {form.fields.map((field) => (
                     <FieldComponent
                       key={field.id}

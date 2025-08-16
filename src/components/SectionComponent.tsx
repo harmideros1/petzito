@@ -11,12 +11,12 @@ interface SectionComponentProps {
   onFieldDrop: (field: Field, formId: string) => void;
 }
 
-const SectionComponent: React.FC<SectionComponentProps> = ({ 
-  section, 
-  onUpdate, 
-  onDelete, 
+const SectionComponent: React.FC<SectionComponentProps> = ({
+  section,
+  onUpdate,
+  onDelete,
   onFormDrop,
-  onFieldDrop 
+  onFieldDrop
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -34,8 +34,8 @@ const SectionComponent: React.FC<SectionComponentProps> = ({
       if (item.type === 'form') {
         onFormDrop(item.data, section.id);
       } else if (item.type === 'field') {
-        // Si se suelta un field directamente en una section, agregarlo al primer form existente
-        // o crear un nuevo form solo si no hay ninguno
+        // Si se suelta un field directamente en una section, crear un nuevo form para él
+        // solo si no hay ninguno
         if (section.forms.length === 0) {
           const newForm: Form = {
             id: `form_${Date.now()}`,
@@ -43,19 +43,8 @@ const SectionComponent: React.FC<SectionComponentProps> = ({
             fields: [item.data]
           };
           onFormDrop(newForm, section.id);
-        } else {
-          // Agregar el field al primer form existente
-          const firstForm = section.forms[0];
-          const updatedForm = {
-            ...firstForm,
-            fields: [...firstForm.fields, item.data]
-          };
-          const updatedSection = {
-            ...section,
-            forms: section.forms.map(f => f.id === firstForm.id ? updatedForm : f)
-          };
-          onUpdate(updatedSection);
         }
+        // Si ya hay forms, NO hacer nada aquí - el field debe ser arrastrado al form específico
       }
     },
     collect: (monitor) => ({
@@ -92,12 +81,13 @@ const SectionComponent: React.FC<SectionComponentProps> = ({
   return (
     <div
       ref={drag as any}
-      className={`bg-white rounded-lg shadow-md border-2 border-dashed border-petzito-olive p-4 mb-6 cursor-move transition-all duration-200 ${
-        isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg'
+      className={`bg-white rounded-lg shadow-sm border border-petzito-olive p-2 mb-3 cursor-move transition-all duration-200 ${
+        isDragging ? 'opacity-50 scale-95' : 'hover:shadow-md'
       }`}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
+          <span className="text-lg">📁</span>
           <span className="px-2 py-1 rounded-full text-xs font-medium bg-petzito-olive text-white">
             Section
           </span>
@@ -121,7 +111,7 @@ const SectionComponent: React.FC<SectionComponentProps> = ({
       </div>
 
       {isExpanded && (
-        <div className="space-y-4 pt-4 border-t border-gray-200">
+        <div className="space-y-2 pt-2 border-t border-gray-200">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Section Name</label>
             <input
@@ -133,23 +123,25 @@ const SectionComponent: React.FC<SectionComponentProps> = ({
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium text-gray-700">Forms</label>
-              <span className="text-sm text-gray-500">Drop forms or fields here</span>
+              <span className="text-sm text-gray-500">
+                {section.forms.length === 0 ? 'Drop forms or fields here' : 'Drop forms here'}
+              </span>
             </div>
             <div
               ref={drop as any}
-              className={`min-h-[120px] p-4 border-2 border-dashed rounded-lg transition-colors ${
+              className={`min-h-[80px] p-2 border-2 border-dashed rounded-lg transition-colors ${
                 isOver ? 'border-petzito-mustard bg-petzito-mustard bg-opacity-10' : 'border-gray-300'
               }`}
             >
               {section.forms.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
+                <div className="text-center text-gray-500 py-4">
                   <p>No forms yet</p>
                   <p className="text-sm">Drag and drop forms or fields here</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-1">
                   {section.forms.map((form) => (
                     <FormComponent
                       key={form.id}

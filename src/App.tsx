@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FlowData } from './types';
 import FlowComponent from './components/FlowComponent';
 import ComponentPalette from './components/ComponentPalette';
 import JsonPanel from './components/JsonPanel';
+import MobilePreview from './components/MobilePreview';
 
 const initialData: FlowData = {
   flow: {
@@ -82,92 +84,131 @@ function App() {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-petzito-background">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-petzito-mustard to-petzito-teal rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">P</span>
+    <Router>
+      <DndProvider backend={HTML5Backend}>
+        <div className="min-h-screen bg-petzito-background">
+          {/* Header */}
+          <header className="bg-white shadow-sm border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-16">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-petzito-mustard to-petzito-teal rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">P</span>
+                    </div>
+                    <h1 className="text-xl font-bold text-gray-800">Petzito</h1>
                   </div>
-                  <h1 className="text-xl font-bold text-gray-800">Petzito</h1>
+                  <span className="text-sm text-gray-500">Flow Builder</span>
                 </div>
-                <span className="text-sm text-gray-500">Flow Builder</span>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImport}
-                  className="hidden"
-                  id="import-file"
-                />
-                <label
-                  htmlFor="import-file"
-                  className="px-4 py-2 bg-petzito-teal text-white rounded-md hover:bg-petzito-teal/90 cursor-pointer transition-colors"
-                >
-                  Importar
-                </label>
-                <button
-                  onClick={handleExport}
-                  className="px-4 py-2 bg-petzito-mustard text-white rounded-md hover:bg-petzito-mustard/90 transition-colors"
-                >
-                  Exportar
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                >
-                  Resetear
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
 
-        {/* Main Content - Changed to 2 columns layout */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-12 gap-8">
-            {/* Left Sidebar - Component Palette */}
-            <div className="col-span-3">
-              <ComponentPalette />
-            </div>
+                <div className="flex items-center space-x-3">
+                  {/* Navigation Links */}
+                  <div className="flex items-center space-x-2 mr-4">
+                    <Link
+                      to="/"
+                      className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                    >
+                      Builder
+                    </Link>
+                    <Link
+                      to="/preview"
+                      className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                    >
+                      📱 Preview
+                    </Link>
+                  </div>
 
-            {/* Center - Flow Builder */}
-            <div className="col-span-5">
-              <FlowComponent
-                flow={flowData.flow}
-                onUpdate={handleFlowUpdate}
-              />
-            </div>
-
-            {/* Right Sidebar - JSON Panel (now wider) */}
-            <div className="col-span-4">
-              <div className="sticky top-8">
-                <JsonPanel
-                  data={flowData}
-                  onDataChange={handleJsonChange}
-                />
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImport}
+                    className="hidden"
+                    id="import-file"
+                  />
+                  <label
+                    htmlFor="import-file"
+                    className="px-4 py-2 bg-petzito-teal text-white rounded-md hover:bg-petzito-teal/90 cursor-pointer transition-colors"
+                  >
+                    Importar
+                  </label>
+                  <button
+                    onClick={handleExport}
+                    className="px-4 py-2 bg-petzito-mustard text-white rounded-md hover:bg-petzito-mustard/90 transition-colors"
+                  >
+                    Exportar
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    Resetear
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </main>
+          </header>
 
-        {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 mt-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="text-center text-sm text-gray-500">
-              <p>Petzito Flow Builder - Interfaz web interactiva para crear flujos, secciones, formularios y campos</p>
-              <p className="mt-1">Desarrollado con React, TypeScript y TailwindCSS</p>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </DndProvider>
+          {/* Main Content */}
+          <Routes>
+            {/* Mobile Preview Route */}
+            <Route
+              path="/preview"
+              element={<MobilePreview data={flowData} />}
+            />
+
+            {/* Main Builder Route */}
+            <Route
+              path="/"
+              element={
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <div className="grid grid-cols-12 gap-8">
+                    {/* Left Sidebar - Component Palette */}
+                    <div className="col-span-3">
+                      <ComponentPalette />
+                    </div>
+
+                    {/* Center - Flow Builder */}
+                    <div className="col-span-5">
+                      <FlowComponent
+                        flow={flowData.flow}
+                        onUpdate={handleFlowUpdate}
+                      />
+                    </div>
+
+                    {/* Right Sidebar - JSON Panel (now wider) */}
+                    <div className="col-span-4">
+                      <div className="sticky top-8">
+                        <JsonPanel
+                          data={flowData}
+                          onDataChange={handleJsonChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </main>
+              }
+            />
+          </Routes>
+
+          {/* Footer - Only show on builder page */}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <footer className="bg-white border-t border-gray-200 mt-16">
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="text-center text-sm text-gray-500">
+                      <p>Petzito Flow Builder - Interfaz web interactiva para crear flujos, secciones, formularios y campos</p>
+                      <p className="mt-1">Desarrollado con React, TypeScript y TailwindCSS</p>
+                    </div>
+                  </div>
+                </footer>
+              }
+            />
+          </Routes>
+        </div>
+      </DndProvider>
+    </Router>
   );
 }
 

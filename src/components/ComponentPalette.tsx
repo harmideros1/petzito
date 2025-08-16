@@ -5,31 +5,24 @@ import { Field, Form, Section } from '../types';
 
 const ComponentPalette: React.FC = () => {
   const createField = (type: Field['type']): Field => ({
-    id: `field_${uuidv4()}`,
+    id: `field_${Date.now()}`,
     type,
-    label: `New ${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
-    placeholder: `Enter ${type}...`,
-    validations: {
-      required: false,
-    },
-    metadata: {
-      translatable: true,
-      errorColor: '#E6A623',
-      ...(type === 'select' && { options: ['Option 1', 'Option 2', 'Option 3'] }),
-      ...(type === 'textarea' && { rows: 3 }),
-    },
+    label: `New ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+    placeholder: `Enter ${type}`,
+    validations: { required: false },
+    metadata: { translatable: true }
   });
 
   const createForm = (): Form => ({
-    id: `form_${uuidv4()}`,
+    id: `form_${Date.now()}`,
     name: 'New Form',
-    fields: [],
+    fields: []
   });
 
   const createSection = (): Section => ({
-    id: `section_${uuidv4()}`,
+    id: `section_${Date.now()}`,
     name: 'New Section',
-    forms: [],
+    forms: []
   });
 
   const DraggableComponent: React.FC<{
@@ -37,8 +30,9 @@ const ComponentPalette: React.FC = () => {
     label: string;
     description: string;
     colorClass: string;
+    icon: string;
     onCreate: () => any;
-  }> = ({ type, label, description, colorClass, onCreate }) => {
+  }> = ({ type, label, description, colorClass, icon, onCreate }) => {
     const [{ isDragging }, drag] = useDrag({
       type,
       item: { type, id: `new_${type}`, data: onCreate() },
@@ -50,99 +44,87 @@ const ComponentPalette: React.FC = () => {
     return (
       <div
         ref={drag as any}
-        className={`p-4 bg-white rounded-lg shadow-md border-2 border-dashed border-transparent hover:${colorClass} cursor-move transition-all duration-200 ${
-          isDragging ? 'opacity-50 scale-95' : 'hover:shadow-lg'
+        className={`group relative p-3 bg-white rounded-lg shadow-sm border border-gray-200 hover:${colorClass} cursor-move transition-all duration-200 ${
+          isDragging ? 'opacity-50 scale-95' : 'hover:shadow-md'
         }`}
+        title={description}
       >
         <div className="flex items-center space-x-3">
-          <div className={`w-3 h-3 rounded-full ${colorClass}`}></div>
-          <div className="flex-1">
-            <h4 className="font-medium text-gray-800">{label}</h4>
-            <p className="text-sm text-gray-500">{description}</p>
+          <div className={`text-2xl ${colorClass}`}>
+            {icon}
           </div>
+          <div className="flex-1">
+            <h4 className="font-medium text-gray-800 text-sm">{label}</h4>
+          </div>
+        </div>
+
+        {/* Tooltip */}
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+          {description}
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
         </div>
       </div>
     );
   };
 
-  const fieldTypes: Array<{ type: Field['type']; label: string; description: string }> = [
-    { type: 'text', label: 'Text Input', description: 'Single line text input' },
-    { type: 'textarea', label: 'Text Area', description: 'Multi-line text input' },
-    { type: 'number', label: 'Number Input', description: 'Numeric input field' },
-    { type: 'email', label: 'Email Input', description: 'Email address input' },
-    { type: 'tel', label: 'Phone Input', description: 'Telephone number input' },
-    { type: 'date', label: 'Date Input', description: 'Date picker field' },
-    { type: 'checkbox', label: 'Checkbox', description: 'Boolean selection' },
-    { type: 'select', label: 'Select Dropdown', description: 'Option selection' },
+  const fieldTypes: Array<{ type: Field['type']; label: string; description: string; icon: string; colorClass: string }> = [
+    { type: 'text', label: 'Text Input', description: 'Single line text input', icon: '📝', colorClass: 'text-blue-600' },
+    { type: 'textarea', label: 'Text Area', description: 'Multi-line text input', icon: '📄', colorClass: 'text-indigo-600' },
+    { type: 'number', label: 'Number Input', description: 'Numeric input field', icon: '🔢', colorClass: 'text-green-600' },
+    { type: 'email', label: 'Email Input', description: 'Email address input', icon: '📧', colorClass: 'text-red-600' },
+    { type: 'tel', label: 'Phone Input', description: 'Telephone number input', icon: '📞', colorClass: 'text-orange-600' },
+    { type: 'date', label: 'Date Input', description: 'Date picker field', icon: '📅', colorClass: 'text-purple-600' },
+    { type: 'checkbox', label: 'Checkbox', description: 'Boolean selection', icon: '☑️', colorClass: 'text-yellow-600' },
+    { type: 'select', label: 'Select Dropdown', description: 'Option selection', icon: '📋', colorClass: 'text-pink-600' },
+    { type: 'file', label: 'File Upload', description: 'Document and image upload', icon: '📎', colorClass: 'text-emerald-600' },
+    { type: 'camera', label: 'Camera', description: 'Photo capture and gallery', icon: '📷', colorClass: 'text-cyan-600' },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Component Palette</h2>
-        <p className="text-sm text-gray-600">Drag and drop components to build your flow</p>
-      </div>
+    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Component Palette</h3>
 
-      <div className="space-y-4">
-        {/* Fields */}
+      <div className="space-y-3">
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-petzito-teal rounded-full mr-2"></span>
-            Fields
-          </h3>
-          <div className="grid grid-cols-1 gap-3">
+          <h4 className="text-sm font-medium text-gray-700 mb-2 text-petzito-olive">Fields</h4>
+          <div className="grid grid-cols-1 gap-2">
             {fieldTypes.map((fieldType) => (
               <DraggableComponent
                 key={fieldType.type}
                 type="field"
                 label={fieldType.label}
                 description={fieldType.description}
-                colorClass="border-petzito-teal"
+                colorClass={fieldType.colorClass}
+                icon={fieldType.icon}
                 onCreate={() => createField(fieldType.type)}
               />
             ))}
           </div>
         </div>
 
-        {/* Forms */}
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-petzito-mustard rounded-full mr-2"></span>
-            Forms
-          </h3>
+          <h4 className="text-sm font-medium text-gray-700 mb-2 text-petzito-mustard">Forms</h4>
           <DraggableComponent
             type="form"
             label="Form Container"
-            description="Group fields together in a form"
-            colorClass="border-petzito-mustard"
+            description="Container for organizing multiple fields"
+            colorClass="text-petzito-mustard"
+            icon="📋"
             onCreate={createForm}
           />
         </div>
 
-        {/* Sections */}
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-3 flex items-center">
-            <span className="w-2 h-2 bg-petzito-olive rounded-full mr-2"></span>
-            Sections
-          </h3>
+          <h4 className="text-sm font-medium text-gray-700 mb-2 text-petzito-olive">Sections</h4>
           <DraggableComponent
             type="section"
             label="Section Container"
-            description="Organize forms into logical groups"
-            colorClass="border-petzito-olive"
+            description="Container for organizing multiple forms"
+            colorClass="text-petzito-olive"
+            icon="📁"
             onCreate={createSection}
           />
         </div>
-      </div>
-
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <h4 className="text-sm font-medium text-gray-700 mb-2">Quick Tips:</h4>
-        <ul className="text-xs text-gray-600 space-y-1">
-          <li>• Drag fields into forms to organize them</li>
-          <li>• Drag forms into sections to group them</li>
-          <li>• Drag components directly into the flow area</li>
-          <li>• Click the arrow to expand and configure components</li>
-        </ul>
       </div>
     </div>
   );

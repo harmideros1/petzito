@@ -1,6 +1,6 @@
 export interface Field {
   id: string;
-  type: 'text' | 'number' | 'date' | 'checkbox' | 'select' | 'textarea' | 'email' | 'tel';
+  type: 'text' | 'number' | 'date' | 'checkbox' | 'select' | 'textarea' | 'email' | 'tel' | 'file' | 'camera';
   label: string;
   placeholder?: string;
   validations: {
@@ -16,6 +16,10 @@ export interface Field {
     errorColor?: string;
     options?: string[]; // For select fields
     rows?: number; // For textarea
+    maxFileSize?: number; // For file upload (in MB)
+    allowedTypes?: string[]; // For file upload (e.g., ['pdf', 'png', 'jpg'])
+    photoQuality?: 'low' | 'medium' | 'high'; // For camera
+    allowGallery?: boolean; // For camera
   };
 }
 
