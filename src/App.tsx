@@ -7,6 +7,7 @@ import FlowComponent from './components/FlowComponent';
 import ComponentPalette from './components/ComponentPalette';
 import JsonPanel from './components/JsonPanel';
 import MobilePreview from './components/MobilePreview';
+import FlowManager from './components/FlowManager';
 
 const initialData: FlowData = {
   flow: {
@@ -83,6 +84,16 @@ function App() {
     event.target.value = '';
   };
 
+  const handleFlowSelect = (flow: any) => {
+    // Convert backend flow format to frontend format
+    const frontendFlow = {
+      id: flow.id,
+      name: flow.name,
+      sections: flow.json_schema?.sections || []
+    };
+    setFlowData({ flow: frontendFlow });
+  };
+
   return (
     <Router>
       <DndProvider backend={HTML5Backend}>
@@ -109,6 +120,12 @@ function App() {
                       className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
                     >
                       Builder
+                    </Link>
+                    <Link
+                      to="/flows"
+                      className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                    >
+                      📋 Flujos
                     </Link>
                     <Link
                       to="/preview"
@@ -150,6 +167,12 @@ function App() {
 
           {/* Main Content */}
           <Routes>
+            {/* Flow Manager Route */}
+            <Route
+              path="/flows"
+              element={<FlowManager onFlowSelect={handleFlowSelect} />}
+            />
+
             {/* Mobile Preview Route */}
             <Route
               path="/preview"

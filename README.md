@@ -1,397 +1,264 @@
-# Petzito Flow Builder
+# 🚀 Petzito Flow Builder
 
-Una interfaz web interactiva que permite a los usuarios finales crear flujos, secciones, formularios y campos de manera visual. La aplicación funciona como un form builder dinámico con opción de arrastrar y soltar componentes, mientras muestra y actualiza en tiempo real el JSON generado que representa la estructura creada.
+Sistema completo de gestión de flujos de formularios dinámicos con interfaz web interactiva y API REST robusta.
 
-## 🚀 Características
+## ✨ **Características Principales**
 
-- **Interfaz gráfica interactiva** con diseño limpio y minimalista
-- **Drag & Drop** para mover y anidar componentes
-- **Visualización en tiempo real** del JSON generado
-- **Edición directa del JSON** con sincronización bidireccional
-- **Paleta de componentes** con campos, formularios y secciones
-- **Configuración avanzada** de campos con validaciones y metadatos
-- **Persistencia local** con localStorage
-- **Importación/Exportación** de flujos en formato JSON
-- **Preview móvil** para simular la experiencia en dispositivos móviles
-- **Interfaz ultra-compacta** optimizada para máximo aprovechamiento del espacio vertical
-- **Iconos intuitivos** para cada tipo de componente
-- **Tooltips informativos** que aparecen al hacer hover
+### 🎯 **Flow Builder (Constructor de Flujos)**
+- **Interfaz drag & drop** para crear flujos de formularios
+- **Componentes arrastrables** (secciones, formularios, campos)
+- **Editor visual intuitivo** con paleta de componentes
+- **Preview en tiempo real** del formulario
+- **Exportación/Importación** de flujos en formato JSON
 
-## 🎨 Paleta de Colores
+### 📋 **Gestor de Flujos (Flow Manager)**
+- **CRUD completo** de flujos (Crear, Leer, Actualizar, Eliminar)
+- **Sistema de filtros avanzado:**
+  - 🔍 Filtro por nombre (búsqueda en tiempo real)
+  - 🌍 Filtro por país
+  - 🏙️ Filtro por ciudad (filtrado inteligente por país)
+  - 🧹 Botón para limpiar filtros
+- **Paginación configurable:**
+  - Items por página: 10, 20, 50, 100
+  - Navegación entre páginas
+  - Información de resultados
+- **Ordenamiento inteligente:**
+  - Por defecto: Más reciente primero
+  - Toggle entre más reciente/antiguo
+- **Interfaz moderna con iconos:**
+  - ✏️ Icono de edición (azul)
+  - 🗑️ Icono de eliminación (rojo)
+  - Tooltips informativos
+  - Hover effects
 
-La aplicación utiliza la paleta de colores de Petzito:
+### 🔧 **Tipos de Campos Soportados**
+- **Text** - Campos de texto simple
+- **Textarea** - Campos de texto largo
+- **Number** - Campos numéricos
+- **Date** - Selectores de fecha
+- **Checkbox** - Casillas de verificación
+- **Select** - Menús desplegables
+- **Email** - Campos de correo electrónico
+- **Tel** - Campos de teléfono
+- **File** - Subida de archivos
+- **Camera** - Captura de fotos
 
-- **Fondo claro**: `#F8F4ED`
-- **Dorado mostaza**: `#CA8A04` (botones primarios)
-- **Verde oliva**: `#84A92C` (éxitos/estados válidos)
-- **Azul verdoso**: `#5EB5BE` (botones secundarios)
-- **Amarillo cálido**: `#E6A623` (advertencias)
-- **Marrón oscuro**: `#4B2E13` (errores)
+### 🌍 **Sistema de Ubicaciones**
+- **Países y ciudades** pre-cargados
+- **Relaciones geográficas** automáticas
+- **Filtrado inteligente** por ubicación
+- **Validación** de ubicaciones
 
-## 🏗️ Estructura de Datos
+### 📱 **Preview Móvil**
+- **Vista previa responsive** del formulario
+- **Simulación de dispositivo móvil**
+- **Validación visual** de campos
 
+## 🏗️ **Arquitectura Técnica**
+
+### **Backend (Rails 7.1 + PostgreSQL)**
+- **API REST** con autenticación JWT
+- **Base de datos** PostgreSQL con relaciones
+- **Validaciones** robustas de JSON Schema
+- **Serializers** para respuestas consistentes
+- **CORS** configurado para desarrollo
+
+### **Frontend (React 18 + TypeScript)**
+- **Componentes funcionales** con hooks
+- **TypeScript** para type safety
+- **TailwindCSS** para estilos modernos
+- **React DnD** para drag & drop
+- **Estado local** con React hooks
+
+### **Base de Datos**
+- **Modelos:** Flow, Country, City, User
+- **Relaciones:** Flows → Cities → Countries
+- **Validaciones:** JSON Schema, ubicaciones
+- **UUIDs** para identificadores únicos
+
+## 🚀 **Scripts de Inicio Rápido**
+
+### Para macOS/Linux:
+```bash
+# Iniciar stack completo (backend + frontend)
+./start-stack.sh
+
+# Solo backend Rails
+./start-backend.sh
+
+# Solo frontend React
+./start-frontend.sh
+
+# Detener todos los servicios
+./stop-stack.sh
 ```
-Flow
-├── Sections[]
-│   ├── Forms[]
-│   │   ├── Fields[]
-│   │   │   ├── Validations
-│   │   │   └── Metadata
-│   │   └── Submit URL
-│   └── Name
-└── Name
+
+### Para Windows (PowerShell):
+```powershell
+# Iniciar stack completo
+.\start-stack.ps1
 ```
 
-### Tipos de Campos Disponibles
+### URLs Disponibles:
+- **Frontend**: http://localhost:3001
+- **Backend**: http://localhost:3000
+- **API Docs**: http://localhost:3000/api-docs
+- **Gestor de Flujos**: http://localhost:3001/flows
 
-#### **Campos Básicos**
-- **📝 Text**: Entrada de texto de una línea
-- **📄 Textarea**: Entrada de texto multilínea
-- **🔢 Number**: Entrada numérica
-- **📧 Email**: Entrada de correo electrónico
-- **📞 Tel**: Entrada de teléfono
-- **📅 Date**: Selector de fecha
-- **☑️ Checkbox**: Casilla de verificación
-- **📋 Select**: Menú desplegable
+### Características de los Scripts:
+- ✅ **Instalación automática** de dependencias
+- ✅ **Configuración automática** de base de datos
+- ✅ **Seeds automáticos** de países y ciudades
+- ✅ **Monitoreo de servicios** en tiempo real
+- ✅ **Logs centralizados** para debugging
+- ✅ **Limpieza automática** al salir
 
-#### **Campos Avanzados** ✨ **NUEVO**
-- **📎 File Upload**: Subida de archivos con validaciones
-  - Tipos permitidos: PDF, PNG, JPG, JPEG
-  - Tamaño máximo configurable (1-50 MB)
-  - Lista personalizable de extensiones
-- **📷 Camera**: Captura de fotos y acceso a galería
-  - Calidad configurable: Low, Medium, High
-  - Opción de acceso a galería de fotos
-  - Optimizado para dispositivos móviles
+📖 **Ver documentación completa**: [SCRIPTS-README.md](./SCRIPTS-README.md)
 
-## 🛠️ Tecnologías Utilizadas
+## 🔌 **API Endpoints**
 
-### Versiones Específicas
-- **Node.js**: 18.20.5 o superior
-- **npm**: 9.0.0 o superior
-- **React**: 19.1.1
-- **TypeScript**: 4.9.5
-- **TailwindCSS**: 3.4.0
-- **React DnD**: 16.0.1
-- **Monaco Editor**: 4.7.0
+### **Flows (Flujos)**
+- `GET /flows` - Listar todos los flujos
+- `POST /flows` - Crear nuevo flujo
+- `GET /flows/:id` - Obtener flujo específico
+- `PUT /flows/:id` - Actualizar flujo
+- `DELETE /flows/:id` - Eliminar flujo
+- `GET /flows/by_name/:name` - Buscar por nombre
+- `GET /flows/by_city/:city_id` - Filtrar por ciudad
+- `GET /flows/by_country/:country_id` - Filtrar por país
 
-### Dependencias Principales
+### **Locations (Ubicaciones)**
+- `GET /countries` - Listar países
+- `GET /countries/:id` - Obtener país específico
+- `GET /cities` - Listar ciudades
+- `GET /cities/:id` - Obtener ciudad específica
+
+### **Authentication (Autenticación)**
+- `POST /users/sign_up` - Registro de usuario
+- `POST /users/sign_in` - Inicio de sesión
+- `DELETE /users/sign_out` - Cerrar sesión
+
+## 🎨 **Interfaz de Usuario**
+
+### **Paleta de Componentes**
+- **Secciones** - Agrupadores lógicos
+- **Formularios** - Contenedores de campos
+- **Campos** - Elementos de entrada de datos
+
+### **Editor Visual**
+- **Drag & Drop** intuitivo
+- **Configuración** de propiedades
+- **Validaciones** en tiempo real
+- **Preview** del formulario
+
+### **Gestor de Flujos**
+- **Lista paginada** de flujos
+- **Filtros avanzados** por múltiples criterios
+- **Acciones rápidas** con iconos
+- **Información detallada** de cada flujo
+
+## 🔧 **Instalación y Configuración**
+
+### **Requisitos Previos**
+- Ruby 3.3.6+
+- Node.js 18+
+- PostgreSQL 12+
+- Redis (para Sidekiq)
+
+### **Backend (Rails)**
+```bash
+cd backend
+bundle install
+rails db:create db:migrate db:seed
+rails server -p 3000
+```
+
+### **Frontend (React)**
+```bash
+cd src
+npm install
+npm start
+```
+
+## 📊 **Estructura de Datos**
+
+### **Flow JSON Schema**
 ```json
 {
-  "react": "^19.1.1",
-  "react-dom": "^19.1.1",
-  "typescript": "^4.9.5",
-  "tailwindcss": "^3.4.0",
-  "react-dnd": "^16.0.1",
-  "react-dnd-html5-backend": "^16.0.1",
-  "@monaco-editor/react": "^4.7.0"
+  "flow": {
+    "sections": [
+      {
+        "id": "section_1",
+        "name": "Datos Personales",
+        "forms": [
+          {
+            "id": "form_1",
+            "name": "Formulario Principal",
+            "fields": [
+              {
+                "id": "field_1",
+                "type": "text",
+                "label": "Nombre",
+                "placeholder": "Ingresa tu nombre",
+                "validations": {
+                  "required": true
+                },
+                "metadata": {
+                  "translatable": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
-## 📦 Instalación y Configuración
+## 🚀 **Roadmap y Futuras Funcionalidades**
 
-### Prerrequisitos
-- **Node.js**: Asegúrate de tener Node.js 18.20.5 o superior instalado
-- **npm**: Debe estar incluido con Node.js
-- **Git**: Para clonar el repositorio
+### **Próximas Versiones**
+- [ ] **Templates** de flujos predefinidos
+- [ ] **Colaboración** en tiempo real
+- [ ] **Versionado** de flujos
+- [ ] **Analytics** de uso de formularios
+- [ ] **Integración** con servicios externos
+- [ ] **Multiidioma** completo
+- [ ] **Temas visuales** personalizables
 
-### Verificar Versiones
-```bash
-node --version    # Debe ser >= 18.20.5
-npm --version     # Debe ser >= 9.0.0
-git --version     # Cualquier versión reciente
-```
+### **Mejoras Técnicas**
+- [ ] **Caché** Redis para mejor performance
+- [ ] **Background jobs** para procesamiento pesado
+- [ ] **WebSockets** para actualizaciones en tiempo real
+- [ ] **Tests** automatizados completos
+- [ ] **CI/CD** pipeline
 
-### 1. Clonar el Repositorio
-```bash
-git clone <repository-url>
-cd petzito
-```
+## 🤝 **Contribución**
 
-### 2. Instalar Dependencias
-```bash
-npm install
-```
-
-### 3. Verificar Instalación
-```bash
-# Verificar que todas las dependencias estén instaladas
-npm list --depth=0
-
-# Verificar que no haya conflictos de versiones
-npm audit
-```
-
-### 4. Iniciar el Servidor de Desarrollo
-```bash
-npm start
-```
-
-### 5. Acceder a la Aplicación
-- **Local**: [http://localhost:3000](http://localhost:3000)
-- **Red**: [http://192.168.1.5:3000](http://192.168.1.5:3000) (o la IP de tu máquina)
-
-## 🚀 Uso
-
-### Crear un Nuevo Flujo
-
-1. **Arrastra componentes** desde la paleta izquierda al área central
-2. **Organiza jerárquicamente**: Fields → Forms → Sections → Flow
-3. **Configura cada componente** haciendo clic en la flecha para expandir
-4. **Visualiza el JSON** en tiempo real en el panel derecho
-5. **Preview móvil** en la ruta `/preview` para ver el resultado final
-
-### Comportamiento del Drag & Drop
-
-- **Flow**: Solo acepta sections
-- **Section**: Acepta forms y fields
-  - Si no hay forms: crea un nuevo form con el field
-  - Si ya hay forms: el field debe ser arrastrado al form específico
-- **Form**: Solo acepta fields
-- **Field**: Solo se puede mover
-
-### Configurar Campos
-
-#### **Campos Básicos**
-- **Label**: Nombre del campo
-- **Placeholder**: Texto de ayuda
-- **Validaciones**: Required, regex, min/max, etc.
-- **Metadatos**: Colores de error, traducciones, estilos
-
-#### **Campos de Archivo** ✨ **NUEVO**
-- **Tamaño máximo**: Configurable en MB (1-50)
-- **Tipos permitidos**: Lista editable de extensiones
-- **Validaciones**: Restricciones de tipo y peso
-
-#### **Campos de Cámara** ✨ **NUEVO**
-- **Calidad de foto**: Low, Medium, High
-- **Acceso a galería**: Opción habilitable/deshabilitable
-- **Optimización móvil**: Interfaz táctil-friendly
-
-### Configurar Formularios
-
-- **Nombre**: Identificador del formulario
-- **Submit URL**: Endpoint para enviar datos
-- **Campos**: Lista de campos incluidos
-
-### Configurar Secciones
-
-- **Nombre**: Identificador de la sección
-- **Formularios**: Lista de formularios agrupados
-
-## 🎨 **Interfaz Ultra-Compacta** ✨ **NUEVO**
-
-### **Optimizaciones de Espacio**
-- **Componentes reducidos**: 40-50% menos espacio vertical
-- **Iconos descriptivos**: Identificación visual rápida
-- **Tooltips inteligentes**: Información contextual al hover
-- **Layout optimizado**: Mejor aprovechamiento de la pantalla
-
-### **Características Visuales**
-- **Iconos únicos**: Cada tipo de campo tiene su emoji distintivo
-- **Colores temáticos**: Paleta consistente con la marca
-- **Transiciones suaves**: Animaciones fluidas en hover
-- **Diseño responsive**: Se adapta a diferentes tamaños de pantalla
-
-## 📱 **Preview Móvil** ✨ **NUEVO**
-
-### **Simulación de Dispositivo**
-- **Frame de móvil**: Diseño realista con bordes redondeados
-- **Navegación por secciones**: Cambio entre secciones del flujo
-- **Navegación por formularios**: Cambio entre formularios
-- **Renderizado de campos**: Todos los tipos de campos soportados
-
-### **Campos Especiales en Móvil**
-- **File Upload**: Área de drop visual con información de tipos
-- **Camera**: Botones duales para foto y galería
-- **Responsive**: Optimizado para pantallas táctiles
-
-## 💾 Persistencia
-
-- Los datos se guardan automáticamente en `localStorage`
-- Puedes exportar flujos como archivos JSON
-- Puedes importar flujos existentes desde archivos JSON
-
-## 🔧 Comandos Disponibles
-
-```bash
-# Desarrollo
-npm start
-
-# Construcción para producción
-npm run build
-
-# Ejecutar tests
-npm test
-
-# Ejectuar configuración (irreversible)
-npm run eject
-
-# Verificar dependencias
-npm list --depth=0
-
-# Limpiar cache de npm
-npm cache clean --force
-
-# Reinstalar dependencias
-rm -rf node_modules package-lock.json
-npm install
-```
-
-## 🐛 Solución de Problemas
-
-### Error de Puerto en Uso
-```bash
-# Si el puerto 3000 está ocupado
-lsof -ti:3000 | xargs kill -9
-
-# O usar otro puerto
-PORT=3001 npm start
-```
-
-### Problemas con TailwindCSS
-```bash
-# Reinstalar TailwindCSS
-npm uninstall tailwindcss postcss autoprefixer
-npm install -D tailwindcss@^3.4.0 postcss autoprefixer
-
-# Regenerar configuración
-npx tailwindcss init -p
-```
-
-### Problemas de Dependencias
-```bash
-# Limpiar e reinstalar
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Error de TypeScript
-```bash
-# Verificar configuración
-npx tsc --noEmit
-
-# Limpiar cache
-rm -rf node_modules/.cache
-```
-
-## 📁 Estructura del Proyecto
-
-```
-petzito/
-├── public/
-│   ├── index.html
-│   └── favicon.ico
-├── src/
-│   ├── components/
-│   │   ├── ComponentPalette.tsx    # Paleta de componentes con iconos y tooltips
-│   │   ├── FieldComponent.tsx      # Componente de campo individual optimizado
-│   │   ├── FormComponent.tsx       # Componente de formulario compacto
-│   │   ├── SectionComponent.tsx    # Componente de sección optimizado
-│   │   ├── FlowComponent.tsx       # Componente principal del flujo
-│   │   ├── JsonPanel.tsx          # Panel de edición JSON con Monaco Editor
-│   │   └── MobilePreview.tsx      # ✨ NUEVO: Preview móvil del flujo
-│   ├── types/
-│   │   └── index.ts               # Definiciones de tipos TypeScript actualizadas
-│   ├── App.tsx                    # Componente principal con routing
-│   ├── index.tsx                  # Punto de entrada
-│   └── index.css                  # Estilos globales y TailwindCSS
-├── tailwind.config.js             # Configuración de TailwindCSS
-├── postcss.config.js              # Configuración de PostCSS
-├── tsconfig.json                  # Configuración de TypeScript
-├── package.json                   # Dependencias y scripts
-└── README.md                      # Este archivo
-```
-
-## 🔒 Configuración de Seguridad
-
-### Variables de Entorno
-```bash
-# Crear archivo .env.local para variables locales
-REACT_APP_API_URL=http://localhost:8000
-REACT_APP_DEBUG=true
-```
-
-### Dependencias de Desarrollo
-- Todas las dependencias de desarrollo están marcadas con `-D`
-- No se incluyen dependencias innecesarias
-- Se mantienen versiones estables y compatibles
-
-## 🎯 Funcionalidades Futuras
-
-- [x] **Campos de archivo y cámara** ✨ **COMPLETADO**
-- [x] **Interfaz ultra-compacta** ✨ **COMPLETADO**
-- [x] **Iconos y tooltips** ✨ **COMPLETADO**
-- [x] **Preview móvil** ✨ **COMPLETADO**
-- [ ] Conectividad con backend
-- [ ] Pruebas unitarias e integración
-- [ ] Temas personalizables
-- [ ] Colaboración en tiempo real
-- [ ] Plantillas predefinidas
-- [ ] Validación de esquemas
-- [ ] Exportación a diferentes formatos
-- [ ] Sistema de versionado de flujos
-
-## 🤝 Contribución
-
+### **Cómo Contribuir**
 1. Fork el proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-### Estándares de Código
-- Usar TypeScript para todo el código
-- Seguir las convenciones de React
-- Mantener componentes pequeños y reutilizables
-- Documentar funciones complejas
-- Usar TailwindCSS para estilos
-- Implementar iconos y tooltips para mejor UX
+### **Estándares de Código**
+- **Backend**: Ruby on Rails conventions
+- **Frontend**: React + TypeScript best practices
+- **Base de datos**: PostgreSQL con migraciones
+- **Tests**: RSpec para backend, Jest para frontend
 
-## 📄 Licencia
+## 📄 **Licencia**
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-## 📞 Soporte
+## 📞 **Contacto**
 
-Si tienes alguna pregunta o necesitas ayuda, por favor abre un issue en el repositorio.
-
-### Información de Contacto
-- **Proyecto**: Petzito Flow Builder
-- **Repositorio**: [URL del repositorio]
-- **Issues**: [URL de issues]
+- **Equipo de Desarrollo**: dev@petzito.com
+- **Sitio Web**: [petzito.com](https://petzito.com)
+- **Documentación**: [docs.petzito.com](https://docs.petzito.com)
 
 ---
 
-**Desarrollado con ❤️ para Petzito**
-
----
-
-## 🚀 Inicio Rápido
-
-```bash
-# Clonar y configurar en 3 pasos
-git clone <repository-url>
-cd petzito
-npm install && npm start
-```
-
-¡La aplicación estará disponible en [http://localhost:3000](http://localhost:3000)!
-
-## ✨ **Novedades de la Última Versión**
-
-### **v2.0.0 - Interfaz Ultra-Compacta y Nuevos Campos**
-- 🆕 **Campos de archivo**: Subida de documentos e imágenes con validaciones
-- 🆕 **Campos de cámara**: Captura de fotos y acceso a galería
-- 🎨 **Interfaz optimizada**: 40-50% menos espacio vertical
-- 🔍 **Iconos descriptivos**: Identificación visual rápida de componentes
-- 💡 **Tooltips inteligentes**: Información contextual al hacer hover
-- 📱 **Preview móvil**: Simulación completa de la experiencia móvil
-- 🚀 **Mejor rendimiento**: Componentes más ligeros y eficientes
-
-### **Mejoras Técnicas**
-- **TypeScript actualizado**: Nuevos tipos para campos de archivo y cámara
-- **Componentes optimizados**: Reducción significativa del espacio vertical
-- **Iconografía mejorada**: Emojis únicos para cada tipo de campo
-- **Responsive design**: Mejor adaptación a diferentes tamaños de pantalla
-- **UX mejorada**: Tooltips y transiciones más fluidas
+**Petzito Flow Builder** - Construye flujos de formularios dinámicos de manera intuitiva y profesional! 🎯✨

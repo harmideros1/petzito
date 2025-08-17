@@ -40,6 +40,21 @@ export interface Flow {
   id: string;
   name: string;
   sections: Section[];
+  city_id?: number;
+  country_id?: number;
+  json_schema?: {
+    sections: Section[];
+  };
+  city?: {
+    id: number;
+    name: string;
+  };
+  country?: {
+    id: number;
+    name: string;
+  };
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface FlowData {

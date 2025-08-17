@@ -1,0 +1,526 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Petzito Backend API",
+    "version": "v1",
+    "description": "API para la gestión de flujos de formularios dinámicos con autenticación de usuarios y persistencia de progreso.",
+    "contact": {
+      "name": "Equipo de Desarrollo Petzito",
+      "email": "dev@petzito.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desarrollo"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string", "format": "email" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string", "example": "México" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "City": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string", "example": "Ciudad de México" },
+          "country_id": { "type": "integer" },
+          "country": { "$ref": "#/components/schemas/Country" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Flow": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "example": "550e8400-e29b-41d4-a716-446655440000" },
+          "name": { "type": "string", "example": "EncuestaCliente" },
+          "json_schema": {
+            "type": "object",
+            "example": {
+              "sections": [
+                {
+                  "id": "datos_personales",
+                  "title": "Datos Personales",
+                  "forms": [
+                    {
+                      "id": "form_principal",
+                      "fields": [
+                        {
+                          "id": "nombre",
+                          "type": "text",
+                          "label": "Nombre completo"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "city_id": { "type": "integer", "nullable": true },
+          "country_id": { "type": "integer", "nullable": true },
+          "city": { "$ref": "#/components/schemas/City" },
+          "country": { "$ref": "#/components/schemas/Country" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["name", "json_schema"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "Mensaje de error" },
+          "details": { "type": "string", "example": "Detalles adicionales del error" }
+        }
+      }
+    }
+  },
+  "security": [
+    { "Bearer": [] }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Health check del sistema",
+        "description": "Verifica que el sistema esté funcionando correctamente",
+        "responses": {
+          "200": {
+            "description": "Sistema funcionando",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flows": {
+      "post": {
+        "tags": ["Flows"],
+        "summary": "Crea un nuevo flujo",
+        "description": "Crea un nuevo flujo de formularios con el esquema JSON especificado",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flow": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string", "example": "EncuestaCliente" },
+                      "json_schema": { "$ref": "#/components/schemas/Flow/properties/json_schema" },
+                      "city_id": { "type": "integer", "nullable": true, "example": 1 },
+                      "country_id": { "type": "integer", "nullable": true, "example": 1 }
+                    },
+                    "required": ["name", "json_schema"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flujo creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Flow" }
+              }
+            }
+          },
+          "422": {
+            "description": "Parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flows/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID del flujo (UUID)",
+          "schema": { "type": "string", "format": "uuid" },
+          "example": "550e8400-e29b-41d4-a716-446655440000"
+        }
+      ],
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Obtiene un flujo por ID",
+        "description": "Recupera un flujo específico usando su ID único",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Flujo encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Flow" }
+              }
+            }
+          },
+          "404": {
+            "description": "Flujo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Flows"],
+        "summary": "Actualiza un flujo existente",
+        "description": "Modifica un flujo existente con nuevos datos",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flow": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string", "example": "EncuestaClienteActualizada" },
+                      "json_schema": { "type": "object" },
+                      "city_id": { "type": "integer", "nullable": true },
+                      "country_id": { "type": "integer", "nullable": true }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flujo actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Flow" }
+              }
+            }
+          },
+          "422": {
+            "description": "Parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Flujo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Flows"],
+        "summary": "Elimina un flujo",
+        "description": "Elimina permanentemente un flujo del sistema",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Flujo eliminado exitosamente"
+          },
+          "404": {
+            "description": "Flujo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flows/by_name/{name}": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "Nombre del flujo",
+          "schema": { "type": "string" },
+          "example": "EncuestaCliente"
+        }
+      ],
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Busca un flujo por nombre",
+        "description": "Encuentra un flujo específico usando su nombre",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Flujo encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Flow" }
+              }
+            }
+          },
+          "404": {
+            "description": "Flujo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flows/by_city/{city_id}": {
+      "parameters": [
+        {
+          "name": "city_id",
+          "in": "path",
+          "required": true,
+          "description": "ID de la ciudad",
+          "schema": { "type": "integer" },
+          "example": 1
+        }
+      ],
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Obtiene flujos asignados a una ciudad",
+        "description": "Recupera todos los flujos asignados a una ciudad específica",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de flujos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Flow" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flows/by_country/{country_id}": {
+      "parameters": [
+        {
+          "name": "country_id",
+          "in": "path",
+          "required": true,
+          "description": "ID del país",
+          "schema": { "type": "integer" },
+          "example": 1
+        }
+      ],
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Obtiene flujos asignados a un país",
+        "description": "Recupera todos los flujos asignados a un país específico",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de flujos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Flow" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/sign_up": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Registra un nuevo usuario",
+        "description": "Crea una nueva cuenta de usuario en el sistema",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "email": { "type": "string", "format": "email", "example": "user@example.com" },
+                      "password": { "type": "string", "minLength": 6, "example": "password123" },
+                      "password_confirmation": { "type": "string", "minLength": 6, "example": "password123" }
+                    },
+                    "required": ["email", "password", "password_confirmation"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario registrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/sign_in": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Inicia sesión de usuario",
+        "description": "Autentica un usuario existente y genera un token de acceso",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "email": { "type": "string", "format": "email", "example": "user@example.com" },
+                      "password": { "type": "string", "example": "password123" }
+                    },
+                    "required": ["email", "password"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sesión iniciada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/sign_out": {
+      "delete": {
+        "tags": ["Authentication"],
+        "summary": "Cierra sesión de usuario",
+        "description": "Invalida el token de acceso del usuario actual",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Sesión cerrada exitosamente"
+          },
+          "401": {
+            "description": "No autorizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

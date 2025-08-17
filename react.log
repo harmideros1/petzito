@@ -1,0 +1,506 @@
+
+> petzito@0.1.0 start
+> react-scripts start
+
+(node:58874) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:58874) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view petzito in the browser.
+
+  Local:            http://localhost:3001
+  On Your Network:  http://192.168.1.5:3001
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/FlowManager.tsx:479:35
+TS2339: Property 'json_schema' does not exist on type 'Flow'.
+    477 |                     <h3 className="text-lg font-semibold text-gray-800 mb-2">{flow.name}</h3>
+    478 |                     <div className="flex items-center space-x-4 text-sm text-gray-600">
+  > 479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+        |                                   ^^^^^^^^^^^
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+
+ERROR in src/components/FlowManager.tsx:480:35
+TS2339: Property 'json_schema' does not exist on type 'Flow'.
+    478 |                     <div className="flex items-center space-x-4 text-sm text-gray-600">
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+  > 480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+        |                                   ^^^^^^^^^^^
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+
+ERROR in src/components/FlowManager.tsx:480:66
+TS7006: Parameter 'acc' implicitly has an 'any' type.
+    478 |                     <div className="flex items-center space-x-4 text-sm text-gray-600">
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+  > 480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+        |                                                                  ^^^
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+
+ERROR in src/components/FlowManager.tsx:480:71
+TS7006: Parameter 'section' implicitly has an 'any' type.
+    478 |                     <div className="flex items-center space-x-4 text-sm text-gray-600">
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+  > 480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+        |                                                                       ^^^^^^^
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+
+ERROR in src/components/FlowManager.tsx:481:35
+TS2339: Property 'json_schema' does not exist on type 'Flow'.
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+  > 481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+        |                                   ^^^^^^^^^^^
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+    484 |                     </div>
+
+ERROR in src/components/FlowManager.tsx:481:66
+TS7006: Parameter 'acc' implicitly has an 'any' type.
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+  > 481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+        |                                                                  ^^^
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+    484 |                     </div>
+
+ERROR in src/components/FlowManager.tsx:481:71
+TS7006: Parameter 'section' implicitly has an 'any' type.
+    479 |                       <span>{flow.json_schema?.sections?.length || 0} secciones</span>
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+  > 481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+        |                                                                       ^^^^^^^
+    482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+    483 |                       ) || 0} campos</span>
+    484 |                     </div>
+
+ERROR in src/components/FlowManager.tsx:482:55
+TS7006: Parameter 'formAcc' implicitly has an 'any' type.
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+  > 482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+        |                                                       ^^^^^^^
+    483 |                       ) || 0} campos</span>
+    484 |                     </div>
+    485 |                   </div>
+
+ERROR in src/components/FlowManager.tsx:482:64
+TS7006: Parameter 'form' implicitly has an 'any' type.
+    480 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) => acc + (section.forms?.length || 0), 0) || 0} formularios</span>
+    481 |                       <span>{flow.json_schema?.sections?.reduce((acc, section) =>
+  > 482 |                         acc + (section.forms?.reduce((formAcc, form) => formAcc + (form.fields?.length || 0), 0) || 0), 0
+        |                                                                ^^^^
+    483 |                       ) || 0} campos</span>
+    484 |                     </div>
+    485 |                   </div>
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/FlowManager.tsx:582:32
+TS2339: Property 'city' does not exist on type 'Flow'.
+    580 |                     </div>
+    581 |                     <div className="text-xs text-gray-500">
+  > 582 |                       📍 {flow.city?.name || 'Ciudad no especificada'}, {flow.country?.name || 'País no especificado'}
+        |                                ^^^^
+    583 |                     </div>
+    584 |                   </div>
+    585 |
+
+ERROR in src/components/FlowManager.tsx:582:79
+TS2339: Property 'country' does not exist on type 'Flow'.
+    580 |                     </div>
+    581 |                     <div className="text-xs text-gray-500">
+  > 582 |                       📍 {flow.city?.name || 'Ciudad no especificada'}, {flow.country?.name || 'País no especificado'}
+        |                                                                               ^^^^^^^
+    583 |                     </div>
+    584 |                   </div>
+    585 |
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 296:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 306:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 306:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 299:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 299:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 299:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 299:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 38:10:  'filters' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  Line 38:19:  'setFilters' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 43:10:  'currentPage' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  Line 43:23:  'setCurrentPage' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 44:10:  'itemsPerPage' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 44:24:  'setItemsPerPage' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  Line 45:10:  'sortOrder' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  Line 45:21:  'setSortOrder' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 38:10:  'filters' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  Line 38:19:  'setFilters' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 43:10:  'currentPage' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  Line 43:23:  'setCurrentPage' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 44:10:  'itemsPerPage' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 44:24:  'setItemsPerPage' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  Line 45:10:  'sortOrder' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  Line 45:21:  'setSortOrder' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  Line 358:9:  'handleFilterChange' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 367:9:  'handleItemsPerPageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 372:9:  'handleSortChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  Line 358:9:  'handleFilterChange' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 367:9:  'handleItemsPerPageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 372:9:  'handleSortChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+ERROR in src/components/FlowManager.tsx:342:32
+TS2339: Property 'created_at' does not exist on type 'Flow'.
+    340 |     // Sort by creation date (newest first by default)
+    341 |     filtered.sort((a, b) => {
+  > 342 |       const dateA = new Date(a.created_at || 0);
+        |                                ^^^^^^^^^^
+    343 |       const dateB = new Date(b.created_at || 0);
+    344 |       return sortOrder === 'desc' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
+    345 |     });
+
+ERROR in src/components/FlowManager.tsx:343:32
+TS2339: Property 'created_at' does not exist on type 'Flow'.
+    341 |     filtered.sort((a, b) => {
+    342 |       const dateA = new Date(a.created_at || 0);
+  > 343 |       const dateB = new Date(b.created_at || 0);
+        |                                ^^^^^^^^^^
+    344 |       return sortOrder === 'desc' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
+    345 |     });
+    346 |     
+
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  Line 358:9:  'handleFilterChange' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 367:9:  'handleItemsPerPageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 372:9:  'handleSortChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  Line 358:9:  'handleFilterChange' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  Line 367:9:  'handleItemsPerPageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 372:9:  'handleSortChange' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+Files successfully emitted, waiting for typecheck results...
+Issues checking in progress...
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  Line 350:9:  'paginatedFlows' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  Line 356:9:  'totalPages' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  Line 363:9:  'handlePageChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/components/FlowManager.tsx
+  Line 309:9:  'handleFlowSelect' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+webpack compiled with 1 warning
+No issues found.

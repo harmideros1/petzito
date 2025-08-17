@@ -1,0 +1,711 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Petzito Backend API",
+    "version": "v1",
+    "description": "API para la gestión de flujos de formularios dinámicos con autenticación de usuarios y persistencia de progreso.",
+    "contact": {
+      "name": "Equipo de Desarrollo Petzito",
+      "email": "dev@petzito.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desarrollo"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string", "format": "email" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string", "example": "México" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "City": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string", "example": "Ciudad de México" },
+          "country_id": { "type": "integer" },
+          "country": { "$ref": "#/components/schemas/Country" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Flow": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "example": "550e8400-e29b-41d4-a716-446655440000" },
+          "name": { "type": "string", "example": "EncuestaCliente" },
+          "json_schema": {
+            "type": "object",
+            "example": {
+              "sections": [
+                {
+                  "id": "datos_personales",
+                  "title": "Datos Personales",
+                  "forms": [
+                    {
+                      "id": "form_principal",
+                      "fields": [
+                        {
+                          "id": "nombre",
+                          "type": "text",
+                          "label": "Nombre completo"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "city_id": { "type": "integer", "nullable": true },
+          "country_id": { "type": "integer", "nullable": true },
+          "city": { "$ref": "#/components/schemas/City" },
+          "country": { "$ref": "#/components/schemas/Country" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["name", "json_schema"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "Mensaje de error" },
+          "details": { "type": "string", "example": "Detalles adicionales del error" }
+        }
+      }
+    }
+  },
+  "security": [
+    { "Bearer": [] }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Health check del sistema",
+        "description": "Verifica que el sistema esté funcionando correctamente",
+        "responses": {
+          "200": {
+            "description": "Sistema funcionando correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries": {
+      "get": {
+        "tags": ["Locations"],
+        "summary": "Lista todos los países",
+        "description": "Recupera la lista completa de países disponibles",
+        "responses": {
+          "200": {
+            "description": "Lista de países",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Country"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries/{id}": {
+      "get": {
+        "tags": ["Locations"],
+        "summary": "Obtiene un país por ID",
+        "description": "Recupera información detallada de un país específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID del país",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "País encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Country"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "País no encontrado"
+          }
+        }
+      }
+    },
+    "/cities": {
+      "get": {
+        "tags": ["Locations"],
+        "summary": "Lista todas las ciudades",
+        "description": "Recupera la lista completa de ciudades disponibles con información de país",
+        "responses": {
+          "200": {
+            "description": "Lista de ciudades",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/City"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cities/{id}": {
+      "get": {
+        "tags": ["Locations"],
+        "summary": "Obtiene una ciudad por ID",
+        "description": "Recupera información detallada de una ciudad específica con datos del país",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la ciudad",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ciudad encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/City"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ciudad no encontrada"
+          }
+        }
+      }
+    },
+    "/flows": {
+      "post": {
+        "tags": ["Flows"],
+        "summary": "Crea un nuevo flujo",
+        "description": "Crea un nuevo flujo de formulario dinámico",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flow": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string", "example": "EncuestaCliente" },
+                      "city_id": { "type": "integer", "example": 1, "nullable": true },
+                      "country_id": { "type": "integer", "example": 1, "nullable": true },
+                      "sections": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "name": { "type": "string" },
+                            "forms": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": { "type": "string" },
+                                  "name": { "type": "string" },
+                                  "fields": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": { "type": "string" },
+                                        "type": { "type": "string" },
+                                        "label": { "type": "string" },
+                                        "placeholder": { "type": "string" },
+                                        "validations": { "type": "object" },
+                                        "metadata": { "type": "object" }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": ["name"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flujo creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flow"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/flows/{id}": {
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Obtiene un flujo por ID",
+        "description": "Recupera un flujo específico usando su UUID",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID del flujo",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flujo encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flow"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Flujo no encontrado"
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Flows"],
+        "summary": "Actualiza un flujo existente",
+        "description": "Actualiza un flujo de formulario existente",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID del flujo",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flow": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "city_id": { "type": "integer", "nullable": true },
+                      "country_id": { "type": "integer", "nullable": true },
+                      "sections": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flujo actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flow"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "404": {
+            "description": "Flujo no encontrado"
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Flows"],
+        "summary": "Elimina un flujo",
+        "description": "Elimina un flujo de formulario existente",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "UUID del flujo",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Flujo eliminado exitosamente"
+          },
+          "404": {
+            "description": "Flujo no encontrado"
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/flows/by_name/{name}": {
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Busca flujos por nombre",
+        "description": "Recupera flujos que coincidan con el nombre especificado",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "Nombre del flujo a buscar",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flujos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flow"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/flows/by_city/{city_id}": {
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Busca flujos por ciudad",
+        "description": "Recupera flujos asociados a una ciudad específica",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la ciudad",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flujos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flow"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/flows/by_country/{country_id}": {
+      "get": {
+        "tags": ["Flows"],
+        "summary": "Busca flujos por país",
+        "description": "Recupera flujos asociados a un país específico",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "country_id",
+            "in": "path",
+            "required": true,
+            "description": "ID del país",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flujos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flow"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/users/sign_up": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Registra un nuevo usuario",
+        "description": "Crea una nueva cuenta de usuario",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "password123",
+                        "minLength": 6
+                      },
+                      "password_confirmation": {
+                        "type": "string",
+                        "example": "password123",
+                        "minLength": 6
+                      }
+                    },
+                    "required": ["email", "password", "password_confirmation"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Datos inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/sign_in": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Inicia sesión de usuario",
+        "description": "Autentica un usuario existente y devuelve un token JWT",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "password123"
+                      }
+                    },
+                    "required": ["email", "password"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Token JWT para autenticación"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas"
+          }
+        }
+      }
+    },
+    "/users/sign_out": {
+      "delete": {
+        "tags": ["Authentication"],
+        "summary": "Cierra sesión de usuario",
+        "description": "Invalida el token JWT del usuario actual",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Sesión cerrada exitosamente"
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    }
+  }
+}
